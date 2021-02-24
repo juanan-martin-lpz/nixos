@@ -1,0 +1,9 @@
+
+*.*~
+*.*.swp
+
+.xmonad
+pkgs
+private
+cachix
+
