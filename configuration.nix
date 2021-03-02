@@ -62,6 +62,8 @@
     #mongodb-4_2
     #mongodb-compass_1_22
     robo3t
+    dropbox
+    dropbox-cli
   ];
 
 
@@ -119,6 +121,7 @@
       ./mongodb.nix
       ./samba.nix
       # ./g13d.nix
+      ./dropbox.nix
     ];
 
   # Enable the X11 windowing system.
@@ -200,12 +203,14 @@
     DefaultTimeoutStopSec=10s
   '';
 
-    #services.mysql = {
-#	enable = true;
-#	package = pkgs.mariadb;
- # };
+  services.mysql = {
+	enable = true;
+	package = pkgs.mariadb;
+  };
+
   xdg.portal.enable = true; 
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
   services.flatpak.enable = true;
  
   # This value determines the NixOS release with which your system is to be
