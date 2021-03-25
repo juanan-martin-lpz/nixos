@@ -15,7 +15,7 @@
 
   
   hardware.openrazer.enable = true;
-  hardware.logitech.lcd.enable = true;
+  #hardware.logitech.lcd.enable = true;
   
   
   fileSystems."/" =

@@ -2,8 +2,8 @@
 
 { config, pkgs, ... }:
 
-
-services.httpd = {
+{
+  services.httpd = {
     enable = true;
     # hostName = "localhost";
 
@@ -18,9 +18,15 @@ services.httpd = {
     '';
 
     extraModules = [ "http2" "ssl" 
-		{ name="php7"; path = "${pkgs.php}/modules/libphp7.so";}
-		{ name = "deflate"; path = "${pkgs.apacheHttpd}/modules/mod_deflate.so"; }
-      		{ name = "proxy_wstunnel"; path ="${pkgs.apacheHttpd}/modules/mod_proxy_wstunnel.so"; } ];
+		                 { name="php7"; path = "${pkgs.php}/modules/libphp7.so";}
+		                 { name = "deflate"; path = "${pkgs.apacheHttpd}/modules/mod_deflate.so"; }
+                     { name = "proxy_wstunnel"; path ="${pkgs.apacheHttpd}/modules/mod_proxy_wstunnel.so"; } ];
+
+    virtualHosts = {
+      localhost = {
+        documentRoot = "/var/www/htdocs";
+      };
+    };
 
     extraConfig = ''
 
@@ -83,7 +89,7 @@ services.httpd = {
             </IfModule>
             </Directory>
 	    
-	    ErrorLog "/var/log/error.log"
+	    #ErrorLog "/home/blackraider/www/logs/error.log"
 
             # both cases needed
             <IfModule mod_dir.c>
@@ -255,4 +261,4 @@ services.httpd = {
   #  isNormalUser = true;
   #  home = "/etc/user/http";
   #};
-
+}

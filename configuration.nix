@@ -25,7 +25,7 @@
     zlib
     oh-my-zsh
     git
-    flatpak
+    #flatpak
     mutt
     weechat
     unar
@@ -34,24 +34,41 @@
     zip
     certmgr
     kubernetes
-    #xmonad
+    haskellPackages.xmonad
     haskellPackages.xmobar
     i3status
     stalonetray
+    screen
+    alacritty
+    docker-compose
+    direnv
     # Editores de Texto
     vim
     emacs
     emacs-all-the-icons-fonts
     vscode
+    netbeans
+    android-studio
     #Navegadores
     firefox
     google-chrome
     vivaldi
     vivaldi-ffmpeg-codecs
+    links
     # Aplicaciones y Bases de Datos
     libreoffice
-    mysql
     sqlite
+    mongodb-compass
+    djvulibre
+    imagemagick
+    ffmpegthumbnailer
+    gitkraken
+    cargo
+    postman
+    mupdf
+    mongodb-4_2
+    #mongodb-compass
+    
     # Multimedia
     vlc
     kodi
@@ -59,30 +76,32 @@
     teamspeak_client
     # Lenguajes de Programacion
     nodejs-12_x
-    #mongodb-4_2
-    #mongodb-compass_1_22
+    elixir
+    #jdk
+    #jdk11
+    #jdk14
     robo3t
     dropbox
     dropbox-cli
   ];
 
 
-  #nixpkgs.overlays = [(self: super:
-  #  let
-  #    unstable = builtins.fetchTarball https://github.com/nixos/nixpkgs-channels/archive/nixos-unstable.tar.gz;
-  #    unfreeConfig = config.nixpkgs.config // {
-  #      allowUnfree = true;
-  #    };
-  #  in {
-
-      # emacs = (import unstable { }).emacs;
+#  nixpkgs.overlays = [(self: super:
+#    let
+#      unstable = builtins.fetchTarball https://github.com/nixos/nixpkgs-channels/archive/nixos-unstable.tar.gz;
+#      unfreeConfig = config.nixpkgs.config // {
+#        allowUnfree = true;
+#      };
+#    in {
+#
+#     emacs = (import unstable { }).emacs;
       # mongodb-4_2 = (import unstable { config = unfreeConfig; }).mongodb-4_2;
       # mongodb-compass = (import /home/blackraider/derivations/mongodb-compass { config = unfreeConfig; });
   #    mongodb-compass_1_22 = super.mongodb-compass.overrideAttrs (oldAttrs: rec {
   #      version = "1.22.1";
-  #    });
-  # }
-  #)];
+      #});
+#   }
+#  )];
 
 
 
@@ -111,6 +130,7 @@
       # ./razer.nix
       ./boot.nix
       ./networking.nix
+      ./httpserver.nix
       ./regionals.nix
       ./services.nix
       ./xserver.nix
@@ -118,7 +138,7 @@
       ./xmonad.nix
       ./docker.nix
       #./kubernetes.nix
-      ./mongodb.nix
+      #./mongodb.nix
       ./samba.nix
       # ./g13d.nix
       ./dropbox.nix
@@ -172,8 +192,8 @@
 
   #Enable VirtualBox
 
-  virtualisation.virtualbox.host.enable = true;
-  virtualisation.virtualbox.host.enableExtensionPack = true;
+  virtualisation.virtualbox.host.enable = false;
+  #virtualisation.virtualbox.host.enableExtensionPack = true;
   #users.extraGroups.vboxusers.members = [ "blackraider" ];
 
   users.extraUsers.blackraider = {
@@ -204,8 +224,10 @@
   '';
 
   services.mysql = {
-	enable = true;
-	package = pkgs.mariadb;
+	  enable = true;
+    package = pkgs.mysql80;
+    bind = "0.0.0.0";
+    dataDir = "/var/db/mysql";
   };
 
   xdg.portal.enable = true; 
