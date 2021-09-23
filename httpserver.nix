@@ -54,7 +54,7 @@
 
 	</FilesMatch>
 
-	Alias /phpmyadmin "/var/www/phpmyadmin/"
+	    Alias /phpmyadmin "/var/www/phpmyadmin/"
 
     	<Directory "/var/www/phpmyadmin">
 
@@ -66,10 +66,15 @@
 
     	</Directory>
 
-            <Directory / >
-		Options Indexes FollowSymLinks
-        	AllowOverride FileInfo 
+      <Directory / >
 
+  		     Options Indexes FollowSymLinks
+
+           #AllowOverride FileInfo 
+
+           AllowOverride All
+           Order allow,deny
+           Allow from all
            <IfModule mod_rewrite.c>
 
             ## subdirectory
@@ -87,8 +92,8 @@
             RewriteRule ^([_0-9a-zA-Z-]+/)?(.*\.php)$ $2 [L]
             RewriteRule . index.php [L]
             </IfModule>
-            </Directory>
-	    
+       </Directory>
+
 	    #ErrorLog "/home/blackraider/www/logs/error.log"
 
             # both cases needed

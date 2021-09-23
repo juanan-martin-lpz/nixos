@@ -17,7 +17,6 @@
   };
 
 
-  services.picom.enable = true;
 
   services.xserver.displayManager.defaultSession = "none+xmonad";
 
@@ -29,7 +28,7 @@
 
   services.devmon.enable = true;                         # Enable external device automounting.
 
-  services.xserver.displayManager.sddm.enable = true;    # Enable the default NixOS display manager.
+  # services.xserver.displayManager.sddm.enable = true;    # Enable the default NixOS display manager.
   # services.xserver.desktopManager.plasma5.enable = true; # Enable KDE, the default NixOS desktop environment.
 
   # Install any additional fonts that I require to be used with xmonad

@@ -13,8 +13,7 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  
-  hardware.openrazer.enable = true;
+
   #hardware.logitech.lcd.enable = true;
   
   
@@ -32,6 +31,11 @@
   fileSystems."/mnt/Externo" =
     { device = "/dev/sde1";
       fsType = "ntfs";
+    };
+
+  fileSystems."/mnt/Externo2" =
+    { device = "/dev/sde2";
+      fsType = "ext4";
     };
 
   fileSystems."/mnt/C" =
@@ -53,5 +57,5 @@
   swapDevices = [ ];
 
   nix.maxJobs = lib.mkDefault 12;
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
 }

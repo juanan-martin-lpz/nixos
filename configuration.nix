@@ -13,7 +13,9 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     # Drivers
-    openrazer-daemon
+    #openrazer-daemon
+    #razergenie
+    linuxPackages_4_19.openrazer
 
     # Utilidades del Sistema
     wget
@@ -25,7 +27,7 @@
     zlib
     oh-my-zsh
     git
-    #flatpak
+    flatpak
     mutt
     weechat
     unar
@@ -42,6 +44,7 @@
     alacritty
     docker-compose
     direnv
+    xorg.xmodmap
     # Editores de Texto
     vim
     emacs
@@ -68,11 +71,11 @@
     mupdf
     mongodb-4_2
     #mongodb-compass
-    
+
     # Multimedia
     vlc
     kodi
-    steam
+    #steam
     teamspeak_client
     # Lenguajes de Programacion
     nodejs-12_x
@@ -86,24 +89,27 @@
   ];
 
 
-#  nixpkgs.overlays = [(self: super:
-#    let
-#      unstable = builtins.fetchTarball https://github.com/nixos/nixpkgs-channels/archive/nixos-unstable.tar.gz;
-#      unfreeConfig = config.nixpkgs.config // {
-#        allowUnfree = true;
-#      };
-#    in {
-#
-#     emacs = (import unstable { }).emacs;
-      # mongodb-4_2 = (import unstable { config = unfreeConfig; }).mongodb-4_2;
-      # mongodb-compass = (import /home/blackraider/derivations/mongodb-compass { config = unfreeConfig; });
-  #    mongodb-compass_1_22 = super.mongodb-compass.overrideAttrs (oldAttrs: rec {
-  #      version = "1.22.1";
-      #});
-#   }
-#  )];
 
+  nixpkgs.overlays = [(self: super:
+    let
+      #unstable = import <nixos-unstable> { };
+      unstable = builtins.fetchTarball https://github.com/nixos/nixpkgs-channels/archive/nixos-unstable.tar.gz;
+      unfreeConfig = config.nixpkgs.config // {
+        allowUnfree = true;
+      };
+      #steam = (import unstable {}).steam;
 
+    in {
+      openrazer-daemon = (import unstable {}).openrazer-daemon;
+      hardware.openrazer.enable = true;
+      #programs.steam.enable = true;
+
+      #environment.systemPackages = [
+      #  steam
+      #];
+
+    }
+  )];
 
   # Fuentes
   fonts.fonts = with pkgs; [
@@ -127,10 +133,11 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      # ./razer.nix
+      #./razer.nix
       ./boot.nix
       ./networking.nix
       ./httpserver.nix
+      #./nginx.nix
       ./regionals.nix
       ./services.nix
       ./xserver.nix
@@ -142,6 +149,7 @@
       ./samba.nix
       # ./g13d.nix
       ./dropbox.nix
+      #./tomcat.nix
     ];
 
   # Enable the X11 windowing system.
@@ -190,6 +198,11 @@
   };
 
 
+  users.users.blacky = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" "www-data" "audio" "plugdev" "vboxusers" "libvirtd" "kvm" ]; # Enable ‘sudo’ for the user.
+  };
+
   #Enable VirtualBox
 
   virtualisation.virtualbox.host.enable = false;
@@ -200,6 +213,10 @@
     shell = pkgs.zsh;
   };
 
+  # Enable Steam
+  programs.steam.enable = true;
+
+    
   programs.zsh.enable = true;
 
   programs.zsh.interactiveShellInit = "export ZSH=${pkgs.oh-my-zsh}/share/oh-my-zsh/";
@@ -233,13 +250,15 @@
   xdg.portal.enable = true; 
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
+  services.glusterfs.killMode = "control-group";
+  systemd.watchdog.rebootTime = "30s";
   services.flatpak.enable = true;
  
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "20.09"; # Did you read the comment?
+  system.stateVersion = "21.05"; # Did you read the comment?
 }
 
 
