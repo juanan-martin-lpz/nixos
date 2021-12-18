@@ -3,9 +3,11 @@
 {
   boot.loader.systemd-boot.consoleMode = "1";
 
+  console.keyMap = "us";
+
   # Select internationalisation properties.
   i18n = {
-    consoleKeyMap = "us";
+
     defaultLocale = "es_ES.UTF-8";
     #consoleUseXkbConfig = true;
   };

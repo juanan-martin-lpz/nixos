@@ -5,7 +5,6 @@
   services.samba = {
    enable = true;
    securityType = "user";
-   syncPasswordsByPam = true;
    extraConfig = ''
     workgroup = WORKGROUP
     server string = smbnix

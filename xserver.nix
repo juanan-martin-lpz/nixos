@@ -2,7 +2,11 @@
 
 {
 
-  #services.picom.enable = true;
+  # services.picom.enable = true;
+  services.dbus.enable = true;
+
+  services.upower.enable = true;
+  services.udisks2.enable = true;
 
   # Servidor X
   services.xserver = {
@@ -10,6 +14,8 @@
 	  enable = true;
 	  layout = "us";
 
+    updateDbusEnvironment = true;
+    
     moduleSection = ''
         Load "extmod"
         Load "dbe"
@@ -26,6 +32,7 @@
     desktopManager.plasma5.enable = true;
 
     displayManager.sddm.enable = true;
+
     displayManager.lightdm.enable = false;
 
     displayManager.hiddenUsers = [

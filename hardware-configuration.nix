@@ -13,7 +13,17 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-
+  # Desde https://github.com/angristan/nixos-config/blob/master/configuration.nix
+  
+  # Enable microcode updates for Intel CPU
+  hardware.cpu.intel.updateMicrocode = true;
+  # Enable all the firmware
+  hardware.enableAllFirmware = true;
+  # Enable all the firmware with a license allowing redistribution. (i.e. free firmware and firmware-linux-nonfree)
+  hardware.enableRedistributableFirmware = true;
+  # Enable OpenGL drivers
+  hardware.opengl.enable = true;
+  
   #hardware.logitech.lcd.enable = true;
   
   

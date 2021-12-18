@@ -36,6 +36,10 @@
     		Require all granted
 	</Directory> 
 
+  <Location "/">
+     CacheDisable on
+  </Location>
+
 	<IfModule mime_module>
 
     		AddType text/html .php .phps

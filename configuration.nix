@@ -5,6 +5,12 @@
 { config, pkgs, ... }:
 
 {
+
+  # Nix
+  nix.buildCores = 6;
+  nix.maxJobs = 12;
+
+
   nixpkgs.config.allowUnfree = true;
   # nixpkgs.config.allowBroken = true;
 
@@ -15,11 +21,24 @@
     # Drivers
     #openrazer-daemon
     #razergenie
-    linuxPackages_4_19.openrazer
+    # linuxPackages_4_19.openrazer
+
+    # X
+    xorg.xmodmap
+
+    # Desktop
+    haskellPackages.xmonad
+    haskellPackages.xmobar
+
+    # Terminales
+    screen
+    alacritty
+    kitty
 
     # Utilidades del Sistema
     wget
     rxvt_unicode
+    fish
     clipmenu
     feh
     nitrogen
@@ -35,16 +54,15 @@
     unzip
     zip
     certmgr
-    kubernetes
-    haskellPackages.xmonad
-    haskellPackages.xmobar
     i3status
     stalonetray
-    screen
-    alacritty
-    docker-compose
     direnv
-    xorg.xmodmap
+    nix-index
+    patchelf
+    usbutils
+    qemu
+    file
+
     # Editores de Texto
     vim
     emacs
@@ -52,16 +70,17 @@
     vscode
     netbeans
     android-studio
+
     #Navegadores
     firefox
     google-chrome
     vivaldi
     vivaldi-ffmpeg-codecs
     links
+
     # Aplicaciones y Bases de Datos
     libreoffice
     sqlite
-    mongodb-compass
     djvulibre
     imagemagick
     ffmpegthumbnailer
@@ -70,22 +89,51 @@
     postman
     mupdf
     mongodb-4_2
-    #mongodb-compass
+    mongodb-compass
+    dia
+
+    # Visores
+    mupdf
+
+    # Plasma
+    plasma-vault
+    libsForQt5.kdeconnect-kde
+    libsForQt5.kdesu
+    ark
+
+    # Utilidad
+    peco
+    timg
+    exa
+    fd
+    fzf
+
+    #Virtualizacion
+    docker
+    docker-compose
+    minikube
+    kubernetes
 
     # Multimedia
     vlc
     kodi
     #steam
     teamspeak_client
+
     # Lenguajes de Programacion
-    nodejs-12_x
+    nodejs-16_x
     elixir
     #jdk
     #jdk11
     #jdk14
+    mono
+    python38Full
     robo3t
     dropbox
     dropbox-cli
+    python39Full
+    purescript
+    spago
   ];
 
 
@@ -97,7 +145,7 @@
       unfreeConfig = config.nixpkgs.config // {
         allowUnfree = true;
       };
-      #steam = (import unstable {}).steam;
+      # steam = (import unstable {}).steam;
 
     in {
       openrazer-daemon = (import unstable {}).openrazer-daemon;
@@ -121,11 +169,12 @@
     cantarell-fonts
     fira
     fira-code
+    nerdfonts
   ];
 
   # Prettify the virtual console font early on with Terminus.
   console = {
-    font = "ter-114n";
+    font = "Lat2-Terminus16";
     packages = with pkgs; [ terminus_font ];
     earlySetup = true;
   };
@@ -136,7 +185,7 @@
       #./razer.nix
       ./boot.nix
       ./networking.nix
-      ./httpserver.nix
+      #./httpserver.nix
       #./nginx.nix
       ./regionals.nix
       ./services.nix
@@ -210,26 +259,37 @@
   #users.extraGroups.vboxusers.members = [ "blackraider" ];
 
   users.extraUsers.blackraider = {
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
   };
 
   # Enable Steam
+
+  nixpkgs.config.packageOverrides = pkgs: {
+    steam = pkgs.steam.override {
+      extraPkgs = pkgs: with pkgs; [
+        pango
+        harfbuzz
+      ];
+    };
+  };
+
   programs.steam.enable = true;
 
-    
+
   programs.zsh.enable = true;
+  programs.fish.enable = true;
 
   programs.zsh.interactiveShellInit = "export ZSH=${pkgs.oh-my-zsh}/share/oh-my-zsh/";
   programs.zsh.promptInit = "";
 
   programs.zsh.ohMyZsh = {
     enable = true;
-    
+
     plugins = [ "git" "python" "man" "bower" "cabal" "colorize" "grunt" "gulp" "ng" "npm" "perl" "python" "rails" "ruby" "scala" "screen" "stack" "sudo" "yarn"  ];
     theme = "agnoster";
   };
 
-
+  services.emacs.enable = true;
 
   security.sudo.enable = true;
   security.sudo.extraRules = [ { commands = [ { command = "${pkgs.systemd}/bin/systemctl"; options = [ "NOPASSWD" ]; } ]; groups = [ "wheel" ]; } ];
@@ -253,12 +313,12 @@
   services.glusterfs.killMode = "control-group";
   systemd.watchdog.rebootTime = "30s";
   services.flatpak.enable = true;
- 
+
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "21.05"; # Did you read the comment?
+  system.stateVersion = "21.11"; # Did you read the comment?
 }
 
 
